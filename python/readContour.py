@@ -32,7 +32,10 @@ npx, npy, npz = int(0.01*nx), int(0.01*ny), int(0.05*nz)
 print 'npx, npy, npz = ', npx, npy, npz
 smooth.SetStandardDeviation(npx, npy, npz)
 #smooth.SetRadiusFactors(10, 10, 10)
-smooth.SetInputData(imageData)
+if vtk.VTK_MAJOR_VERSION <= 5:
+  smooth.SetInput(imageData)
+else:
+  smooth.SetInputData(imageData)
 smooth.Update()
 
 print smooth.GetOutput()
@@ -47,7 +50,10 @@ contour.ComputeNormalsOn()
 
 #contour.SetInputConnection(reader.GetOutputPort())
 #contour.SetInputConnection(smooth.GetOutputPort())
-contour.SetInputData(smooth.GetOutput())
+if vtk.VTK_MAJOR_VERSION <= 5:
+  contour.SetInput(smooth.GetOutput())
+else:
+  contour.SetInputData(smooth.GetOutput())
 
 mapper = vtk.vtkPolyDataMapper()
 mapper.ScalarVisibilityOff()
